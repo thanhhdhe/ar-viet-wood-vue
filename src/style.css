@@ -1,0 +1,88 @@
+/* AR Vietwood - Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Bảng màu AR Vietwood */
+  --primary-red: #8B1C23;
+  --gold-accent: #C9A464;
+  --white: #FFFFFF;
+  --dark: #1A1A1A;
+  --light-wood: #EADBC8;
+  
+  /* Màu bổ sung */
+  --darker-red: #6a151a;
+  --darker-gold: #B89452;
+  --almost-dark: #2a2a2a;
+  
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Fonts */
+@font-face {
+  font-family: 'PenumbraBold';
+  src: url('/fonts/PenumbraBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--white);
+  color: var(--dark);
+  overflow-x: hidden;
+}
+
+#app {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--gold-accent);
+  color: var(--dark);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light-wood);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-red);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-accent);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'PenumbraBold', sans-serif;
+}
+
