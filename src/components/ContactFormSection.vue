@@ -288,6 +288,7 @@ const handleSubmit = async () => {
 }
 
 .section-subtitle {
+  font-weight: 700;
   font-size: 1.1rem;
   color: var(--dark);
   opacity: 0.8;
@@ -420,8 +421,8 @@ const handleSubmit = async () => {
 
 .btn-submit {
   padding: 1.2rem 2rem;
-  background: linear-gradient(135deg, var(--primary-red), var(--darker-red));
-  color: var(--white);
+  background: #8B1C23;
+  color: #FFFFFF;
   border: none;
   border-radius: 12px;
   font-size: 1.1rem;
@@ -436,6 +437,7 @@ const handleSubmit = async () => {
 }
 
 .btn-submit:hover:not(:disabled) {
+  background: #a52229;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(139, 28, 35, 0.4);
 }
@@ -459,7 +461,7 @@ const handleSubmit = async () => {
   width: 20px;
   height: 20px;
   border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: var(--white);
+  border-top-color: #FFFFFF;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }

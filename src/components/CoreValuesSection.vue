@@ -3,8 +3,7 @@
     <div class="container">
       <div class="values-header">
         <h2 class="section-title">
-          <span class="title-main">𝐊𝐈𝐌 𝐂𝐇𝐈̉ 𝐍𝐀𝐌</span>
-          <span class="title-brand">𝐀𝐑 𝐕𝐈𝐄𝐓𝐖𝐎𝐎𝐃</span>
+          GIÁ TRỊ CỐT LÕI
         </h2>
       </div>
 
@@ -146,7 +145,7 @@ onUnmounted(() => {
 <style scoped>
 .core-values {
   padding: 6rem 5%;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d1518 50%, #1a1a1a 100%);
+  background: linear-gradient(135deg, #8B1C23 0%, #a52229 50%, #8B1C23 100%);
   position: relative;
   overflow: hidden;
 }
@@ -159,8 +158,8 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 20% 30%, rgba(201, 164, 100, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(139, 28, 35, 0.1) 0%, transparent 50%);
+    radial-gradient(circle at 20% 30%, rgba(201, 164, 100, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(26, 26, 26, 0.2) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
 }
@@ -179,25 +178,26 @@ onUnmounted(() => {
 }
 
 .section-title {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+    font-size: 2.5rem;
+    color: white;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: bold;
 }
 
 .title-main {
   font-size: 3rem;
   font-weight: 900;
-  color: var(--gold-accent);
+  color: #C9A464;
   letter-spacing: 0.1em;
-  text-shadow: 0 4px 20px rgba(201, 164, 100, 0.5);
+  text-shadow: 0 4px 20px rgba(201, 164, 100, 0.6);
   animation: fadeInDown 1s ease;
 }
 
 .title-sub {
   font-size: 1.2rem;
-  color: var(--white);
-  opacity: 0.8;
+  color: #FFFFFF;
+  opacity: 0.9;
   letter-spacing: 0.15em;
   animation: fadeInDown 1.2s ease;
 }
@@ -205,12 +205,9 @@ onUnmounted(() => {
 .title-brand {
   font-size: 2.5rem;
   font-weight: 900;
-  background: linear-gradient(135deg, var(--primary-red), var(--gold-accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #C9A464;
   letter-spacing: 0.1em;
-  text-shadow: 0 4px 20px rgba(139, 28, 35, 0.5);
+  text-shadow: 0 4px 20px rgba(201, 164, 100, 0.6);
   animation: fadeInDown 1.4s ease;
 }
 
@@ -227,10 +224,20 @@ onUnmounted(() => {
 
 /* Values Grid */
 .values-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 2.5rem;
   margin-bottom: 5rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.value-card {
+  flex: 0 0 calc(33.333% - 1.7rem);
+  min-width: 320px;
 }
 
 /* Value Card with Flip Effect */
@@ -286,8 +293,8 @@ onUnmounted(() => {
 
 /* Front Side */
 .card-front {
-  background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(45, 21, 24, 0.9) 100%);
-  border: 2px solid rgba(201, 164, 100, 0.3);
+  background: #FFFFFF;
+  border: 2px solid #C9A464;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -302,8 +309,8 @@ onUnmounted(() => {
   right: 20px;
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, var(--primary-red), var(--darker-red));
-  color: var(--gold-accent);
+  background: #8B1C23;
+  color: #C9A464;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -341,17 +348,17 @@ onUnmounted(() => {
 .card-front .value-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--gold-accent);
+  color: #8B1C23;
   text-align: center;
   margin-bottom: 1rem;
-  text-shadow: 0 2px 10px rgba(201, 164, 100, 0.5);
+  text-shadow: 0 2px 8px rgba(139, 28, 35, 0.2);
 }
 
 .hover-indicator {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--white);
+  color: #1A1A1A;
   opacity: 0.7;
   font-size: 0.9rem;
   margin-top: auto;
@@ -368,13 +375,13 @@ onUnmounted(() => {
 
 /* Back Side */
 .card-back {
-  background: linear-gradient(135deg, var(--primary-red) 0%, var(--darker-red) 100%);
+  background: #8B1C23;
   transform: rotateY(180deg);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 3rem 2.5rem;
-  border: 2px solid var(--gold-accent);
+  border: 2px solid #C9A464;
 }
 
 .back-content {
@@ -384,7 +391,7 @@ onUnmounted(() => {
 .card-back .value-title {
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--gold-accent);
+  color: #C9A464;
   margin-bottom: 1.5rem;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
@@ -396,7 +403,7 @@ onUnmounted(() => {
 }
 
 .value-description p {
-  color: var(--white);
+  color: #FFFFFF;
   line-height: 1.7;
   font-size: 1rem;
   margin: 0;
@@ -409,7 +416,7 @@ onUnmounted(() => {
   content: '✦';
   position: absolute;
   left: 0;
-  color: var(--gold-accent);
+  color: #C9A464;
   font-size: 1rem;
 }
 
@@ -422,17 +429,18 @@ onUnmounted(() => {
 
 .footer-quote {
   max-width: 900px;
-  background: linear-gradient(135deg, rgba(201, 164, 100, 0.1) 0%, rgba(139, 28, 35, 0.1) 100%);
-  border: 2px solid rgba(201, 164, 100, 0.3);
+  background: #EADBC8;
+  border: 2px solid #C9A464;
   border-radius: 20px;
   padding: 3rem 4rem;
   position: relative;
   text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
 
 .quote-icon {
   font-size: 4rem;
-  color: var(--gold-accent);
+  color: #C9A464;
   opacity: 0.5;
   position: absolute;
   top: 10px;
@@ -448,7 +456,7 @@ onUnmounted(() => {
 }
 
 .footer-quote p {
-  color: var(--white);
+  color: #1A1A1A;
   font-size: 1.2rem;
   line-height: 1.8;
   font-style: italic;
@@ -460,8 +468,12 @@ onUnmounted(() => {
 /* Responsive */
 @media (max-width: 1200px) {
   .values-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
+  }
+  
+  .value-card {
+    flex: 0 0 calc(50% - 1rem);
+    min-width: 280px;
   }
 }
 
@@ -479,11 +491,13 @@ onUnmounted(() => {
   }
 
   .values-grid {
-    grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-
+  
   .value-card {
+    flex: 0 0 100%;
+    min-width: auto;
+    max-width: 400px;
     height: 400px;
   }
 

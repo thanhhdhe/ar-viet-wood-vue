@@ -38,15 +38,33 @@ const handleSignup = () => {
 
 <style scoped>
 .promotion-banner {
-  background: linear-gradient(135deg, var(--light-wood) 0%, var(--gold-accent) 50%, var(--primary-red) 100%);
+  background: white;
   padding: 4rem 2rem;
   text-align: center;
-  color: var(--dark);
+  color: #1A1A1A;
+  position: relative;
+  overflow: hidden;
+}
+
+.promotion-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(201, 164, 100, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(139, 28, 35, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .banner-container {
   max-width: 800px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .banner-title {
@@ -54,13 +72,15 @@ const handleSignup = () => {
   font-weight: bold;
   margin-bottom: 1rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: var(--primary-red);
+  color: #8B1C23;
 }
 
 .banner-description {
+  font-weight: 700;
   font-size: 1.2rem;
   margin-bottom: 2rem;
   line-height: 1.6;
+  color: #1A1A1A;
 }
 
 .signup-form {
@@ -72,30 +92,40 @@ const handleSignup = () => {
 
 .email-input {
   padding: 0.8rem 1.2rem;
-  border: none;
+  border: 2px solid #C9A464;
   border-radius: 25px;
   font-size: 1rem;
   width: 300px;
   max-width: 100%;
   outline: none;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: #FFFFFF;
+  color: #1A1A1A;
+}
+
+.email-input:focus {
+  border-color: #8B1C23;
+  box-shadow: 0 0 0 3px rgba(139, 28, 35, 0.1);
 }
 
 .signup-btn {
-  background: var(--gold-accent);
-  color: var(--dark);
-  border: none;
+  background: #8B1C23;
+  color: #FFFFFF;
+  border: 2px solid #8B1C23;
   padding: 0.8rem 2rem;
   border-radius: 25px;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .signup-btn:hover {
-  background: var(--darker-gold);
+  background: #a52229;
+  border-color: #a52229;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(139, 28, 35, 0.3);
 }
 
 @media (max-width: 768px) {

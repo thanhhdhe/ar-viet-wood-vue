@@ -74,7 +74,7 @@
 .ar-phone {
   width: 300px;
   height: 600px;
-  background: var(--almost-dark);
+  background: #2a2a2a;
   border-radius: 40px;
   padding: 15px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
@@ -83,7 +83,7 @@
 .phone-screen {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, var(--primary-red), var(--darker-red));
+  background: linear-gradient(135deg, var(--primary-red), #6a151a);
   border-radius: 30px;
   display: flex;
   align-items: center;

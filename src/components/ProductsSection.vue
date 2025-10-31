@@ -13,16 +13,17 @@
               class="product-card"
               :class="carouselClass(index)"
             >
-              <div class="product-image">
-                <span class="product-icon">{{ product.image }}</span>
-                <div class="product-overlay">
-                  <button class="btn-ar">Xem AR</button>
-                </div>
+              <div class="product-image" @click="goToDetail(product)">
+                <img v-if="product.image && product.image.startsWith('http') || product.image && product.image.includes('/')" 
+                     :src="product.image" 
+                     :alt="product.name"
+                     class="product-img" />
+                <span v-else class="product-icon">{{ product.image }}</span>
               </div>
               <div class="product-info">
                 <h3 class="product-name">{{ product.name }}</h3>
-                <p class="product-price">{{ product.price }}</p>
-                <button class="btn-add-cart">Liên hệ</button>
+                <p class="product-price">Liên hệ</p>
+                <button class="btn-add-cart" @click="goToDetail(product)">Xem chi tiết</button>
               </div>
             </div>
           </div>
@@ -50,7 +51,9 @@
 </template>
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const props = defineProps({ products: Array })
 
 const currentIndex = ref(0)
@@ -69,6 +72,12 @@ const prevProduct = () => {
 const goToProduct = (index) => {
   prevIndex.value = currentIndex.value
   currentIndex.value = index
+}
+
+const goToDetail = (product) => {
+  if (product.id) {
+    router.push({ name: 'ProductDetail', params: { id: product.id } })
+  }
 }
 
 // Sắp xếp lại mảng để active luôn render sau cùng
@@ -99,6 +108,7 @@ const carouselClass = (index) => {
   font-weight: bold;
 }
 .section-subtitle {
+  font-weight: 700;
   text-align: center;
   color: var(--dark);
   font-size: 1.1rem;
@@ -187,6 +197,12 @@ box-shadow: inset -1px -3px 7px 4px rgba(0, 0, 0, 0.2), 0 1.5rem 2.5rem -1.5rem 
   position: relative;
   overflow: hidden;
 }
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
 .product-icon {
   font-size: 6rem;
   filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3));
@@ -238,13 +254,13 @@ box-shadow: inset -1px -3px 7px 4px rgba(0, 0, 0, 0.2), 0 1.5rem 2.5rem -1.5rem 
 }
 .btn-add-cart {
     box-shadow: inset -1px -3px 7px 4px rgba(0, 0, 0, 0.2), 0 1.5rem 2.5rem -1.5rem rgba(139, 28, 35, 0.25), 0 0.5rem 1rem 0 rgba(255, 215, 0, 0.10);
-  width: 100%;
   background: var(--primary-red);
   color: var(--white);
-  padding: 0.8rem;
+  padding: 0.6rem 1.5rem;
   border: none;
   border-radius: 8px;
   font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.3s;
 }

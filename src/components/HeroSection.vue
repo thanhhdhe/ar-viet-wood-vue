@@ -3,18 +3,18 @@
     <h1 class="hero-title">
       <span class="brand-name">AR VIETWOOD</span>
     </h1>
-    <p class="hero-subtitle">Mô hình lắp ghép gỗ thông minh và công nghệ AR</p>
+    <p class="hero-subtitle">Điểm chạm khởi nguồn sáng tạo</p>
     <p class="hero-description">
-      Khám phá thế giới mô hình gỗ cao cấp với công nghệ thực tế ảo tăng cường (AR). 
-      Trải nghiệm sản phẩm trong không gian thực của bạn trước khi mua.
+      AR VietWood phát triển bộ mô hình lắp ghép bằng gỗ an toàn, thân thiện với trẻ em, tích hợp trải nghiệm AR để hướng dẫn lắp ghép, kể chuyện, và biến đồ chơi vật lý thành trải nghiệm học tập tương tác.
+
     </p>
     <div class="hero-buttons">
-      <button class="btn-primary" @click="$emit('show-ar-demo')">
+      <router-link to="/ar-experience" class="btn-primary">
         Trải nghiệm AR ngay
-      </button>
-      <button class="btn-secondary">
+      </router-link>
+      <a href="#products" class="btn-secondary">
         Xem sản phẩm
-      </button>
+      </a>
     </div>
   </div>
   <div class="hero-decoration">
@@ -77,6 +77,7 @@
   align-items: center;
   gap: 0.5rem;
   box-shadow: 0 4px 15px rgba(201, 164, 100, 0.4);
+  text-decoration: none;
 }
 .btn-primary:hover {
   transform: translateY(-2px);
@@ -92,6 +93,8 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
 }
 .btn-secondary:hover {
   background: var(--gold-accent);

@@ -13,11 +13,6 @@
   --dark: #1A1A1A;
   --light-wood: #EADBC8;
   
-  /* Màu bổ sung */
-  --darker-red: #6a151a;
-  --darker-gold: #B89452;
-  --almost-dark: #2a2a2a;
-  
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   font-weight: 400;
@@ -26,14 +21,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Custom Fonts */
-@font-face {
-  font-family: 'PenumbraBold';
-  src: url('/fonts/PenumbraBold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
 }
 
 body {
@@ -79,10 +66,5 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gold-accent);
-}
-
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'PenumbraBold', sans-serif;
 }
 

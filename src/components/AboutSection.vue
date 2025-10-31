@@ -41,6 +41,7 @@
   font-weight: bold;
 }
 .section-subtitle {
+  font-weight: 700;
   text-align: center;
   color: var(--dark);
   font-size: 1.1rem;

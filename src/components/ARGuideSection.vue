@@ -153,6 +153,7 @@ const tips = [
 }
 
 .section-subtitle {
+  font-weight: 700;
   font-size: 1.1rem;
   color: var(--dark);
   opacity: 0.8;
@@ -167,7 +168,7 @@ const tips = [
 }
 
 .step-card {
-  background: var(--white);
+  background: #FFFFFF;
   padding: 2.5rem 2rem;
   border-radius: 20px;
   text-align: center;
@@ -185,7 +186,7 @@ const tips = [
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, var(--primary-red), var(--gold-accent));
+  background: linear-gradient(90deg, #8B1C23, #C9A464);
   border-radius: 20px 20px 0 0;
   transform: scaleX(0);
   transition: transform 0.4s ease;
@@ -208,8 +209,8 @@ const tips = [
   right: 20px;
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, var(--primary-red), var(--darker-red));
-  color: var(--white);
+  background: #8B1C23;
+  color: #FFFFFF;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -228,13 +229,13 @@ const tips = [
 
 .step-title {
   font-size: 1.3rem;
-  color: var(--primary-red);
+  color: #8B1C23;
   margin-bottom: 0.8rem;
   font-weight: 600;
 }
 
 .step-description {
-  color: var(--dark);
+  color: #1A1A1A;
   opacity: 0.8;
   line-height: 1.6;
 }
@@ -255,13 +256,13 @@ const tips = [
 .video-placeholder {
   width: 100%;
   aspect-ratio: 16/9;
-  background: linear-gradient(135deg, var(--primary-red), var(--darker-red));
+  background: linear-gradient(135deg, #8B1C23, #a52229);
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: var(--white);
+  color: #FFFFFF;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow:
@@ -288,7 +289,7 @@ const tips = [
 }
 
 .demo-info {
-  background: var(--white);
+  background: #FFFFFF;
   padding: 2.5rem;
   border-radius: 20px;
   box-shadow:
@@ -368,31 +369,32 @@ const tips = [
 }
 
 .btn-try-ar {
-  background: linear-gradient(135deg, var(--primary-red), var(--darker-red));
-  color: var(--white);
+  background: #8B1C23;
+  color: #FFFFFF;
   box-shadow: 0 4px 15px rgba(139, 28, 35, 0.3);
 }
 
 .btn-try-ar:hover {
+  background: #a52229;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(139, 28, 35, 0.4);
 }
 
 .btn-watch-video {
-  background: var(--white);
-  color: var(--primary-red);
-  border: 2px solid var(--primary-red);
+  background: #FFFFFF;
+  color: #8B1C23;
+  border: 2px solid #8B1C23;
 }
 
 .btn-watch-video:hover {
-  background: var(--primary-red);
-  color: var(--white);
+  background: #8B1C23;
+  color: #FFFFFF;
   transform: translateY(-2px);
 }
 
 /* Tips Section */
 .guide-tips {
-  background: var(--white);
+  background: #FFFFFF;
   padding: 2.5rem;
   border-radius: 20px;
   box-shadow:

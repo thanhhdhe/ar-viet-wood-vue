@@ -1,23 +1,32 @@
 <template>
-  <nav class="navbar">
-    <div class="liquid-glass-overlay"></div>
-    <router-link to="/" class="logo">
-      <img src="/logo.png" alt="AR Vietwood" class="logo-image" />
-      <h1 class="logo-text">AR VIETWOOD</h1>
-    </router-link>
-    <button class="menu-toggle" @click="toggleMenu" :class="{ 'active': isMenuOpen }">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <ul class="nav-links" :class="{ 'active': isMenuOpen }">
-      <li><router-link to="/" @click="closeMenu">Trang chủ</router-link></li>
-      <li><router-link to="/ar-experience" @click="closeMenu">AR Camera</router-link></li>
-      <li><a href="#contact" class="btn-contact" @click="closeMenu">Liên hệ</a></li>
-    </ul>
-    <div v-if="isMenuOpen" class="menu-overlay" @click="closeMenu"></div>
+  <header class="simple-header">
+    <div class="container">
+      <div class="header-content">
+        <router-link to="/" class="logo">
+          <img src="/logo.png" alt="AR Vietwood" class="logo-img" />
+          <span class="logo-text">AR Vietwood</span>
+        </router-link>
+        
+        <nav class="nav-menu">
+          <router-link to="/" class="nav-link">Trang chủ</router-link>
+          <router-link to="/ar-experience" class="nav-link">AR Camera</router-link>
+          <button class="nav-link contact-btn" @click="showContactPopup = true">Liên hệ</button>
+        </nav>
 
-    <!-- Popup code commented out
+        <button class="mobile-menu-btn" @click="toggleMenu">
+          <span class="hamburger">☰</span>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div class="mobile-menu" :class="{ active: menuOpen }">
+        <router-link to="/" class="mobile-nav-link" @click="closeMenu">Trang chủ</router-link>
+        <router-link to="/ar-experience" class="mobile-nav-link" @click="closeMenu">AR Camera</router-link>
+        <button class="mobile-nav-link contact-btn-mobile" @click="handleMobileContact">Liên hệ</button>
+      </div>
+    </div>
+
+    <!-- Contact Popup -->
     <div v-if="showContactPopup" class="contact-popup-overlay" @click="showContactPopup = false">
       <div class="contact-popup" @click.stop>
         <button class="close-popup" @click="showContactPopup = false">✕</button>
@@ -72,205 +81,182 @@
           </button>
         </form>
       </div>
-    </div> -->
-  </nav>
+    </div>
+  </header>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 
-const isMenuOpen = ref(false)
+const menuOpen = ref(false)
+const showContactPopup = ref(false)
+const contactForm = ref({
+  name: '',
+  phone: '',
+  email: '',
+  message: ''
+})
 
 const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value
+  menuOpen.value = !menuOpen.value
 }
 
 const closeMenu = () => {
-  isMenuOpen.value = false
+  menuOpen.value = false
+}
+
+const handleMobileContact = () => {
+  closeMenu()
+  showContactPopup.value = true
+}
+
+const submitContact = () => {
+  console.log('Contact form submitted:', contactForm.value)
+  alert('Cảm ơn bạn! Chúng tôi sẽ liên hệ với bạn sớm nhất.')
+  showContactPopup.value = false
+  contactForm.value = {
+    name: '',
+    phone: '',
+    email: '',
+    message: ''
+  }
 }
 </script>
 
 <style scoped>
+.simple-header {
+  background: #71171b;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 1rem 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .logo {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.75rem;
   text-decoration: none;
-  cursor: pointer;
+  transition: transform 0.3s;
 }
-.logo-text {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--gold-accent);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-.nav-links a {
-  text-decoration: none;
-}
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 5%;
-  position: relative;
-  top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 1200px;
-  z-index: 100;
-  border-radius: 32px;
-  overflow: hidden;
-    box-shadow: 0 2px 24px 0 rgb(0 0 0 / 10%), 0 1.5px 8px 0 rgba(201, 164, 100, 0.10), 0 0 0 1.5px rgba(201, 164, 100, 0.18) inset;
-    background: rgb(18 10 10 / 53%);
-  backdrop-filter: blur(32px) saturate(180%) brightness(1.04);
-  -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.04);
-  border: 1.5px solid rgba(201, 164, 100, 0.10);
 
+.logo:hover {
+  transform: scale(1.05);
 }
-.liquid-glass-overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 1;
-  background:
-    linear-gradient(120deg, rgba(201,164,100,0.06) 0%, rgba(255,255,255,0.06) 60%, rgba(139,28,35,0.03) 100%),
-    repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 8px);
-  opacity: 0.5;
-  mix-blend-mode: lighten;
-  filter: blur(12px) brightness(1.02);
-  animation: glassGradientMove 8s ease-in-out infinite alternate;
-}
-@keyframes glassGradientMove {
-  0% {
-    background-position: 0% 0%;
-    opacity: 0.85;
-  }
-  50% {
-    background-position: 100% 100%;
-    opacity: 1;
-  }
-  100% {
-    background-position: 0% 0%;
-    opacity: 0.85;
-  }
-}
-.navbar::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0; bottom: -16px; height: 32px;
-  pointer-events: none;
-  z-index: 2;
-  background: linear-gradient(180deg, rgba(139,28,35,0.10) 0%, transparent 100%);
-  filter: blur(8px);
-}
-.logo-image {
-  height: 40px;
+
+.logo-img {
+  height: 45px;
   width: auto;
+  object-fit: contain;
+  display: block;
 }
-.nav-links {
+
+.logo-text {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  white-space: nowrap;
+}
+
+.nav-menu {
   display: flex;
-  list-style: none;
   gap: 2rem;
   align-items: center;
 }
-.nav-links a {
-  color: var(--white);
+
+.nav-link {
+  color: #FFFFFF;
   text-decoration: none;
   font-weight: 500;
+  font-size: 1rem;
+  position: relative;
   transition: color 0.3s;
 }
-.nav-links a:hover {
-  color: var(--gold-accent);
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #C9A464;
+  transition: width 0.3s;
 }
-.btn-contact {
-  background: var(--gold-accent);
-  color: var(--dark);
-  padding: 0.6rem 1.5rem;
-  border-radius: 25px;
-  font-weight: 600;
+
+.nav-link:hover {
+  color: #C9A464;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #FFFFFF;
+  padding: 0.5rem;
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.mobile-menu.active {
+  max-height: 300px;
+}
+
+.mobile-nav-link {
+  color: #FFFFFF;
   text-decoration: none;
-  display: inline-block;
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
   transition: all 0.3s;
 }
 
-.btn-contact:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(201, 164, 100, 0.4);
+.mobile-nav-link:hover {
+  background: rgba(201, 164, 100, 0.2);
+  color: #C9A464;
 }
 
-/* Mobile menu styles */
-.menu-toggle {
-  display: none;
-  flex-direction: column;
+.contact-btn,
+.contact-btn-mobile {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.5rem;
-  z-index: 101;
 }
 
-.menu-toggle span {
-  width: 25px;
-  height: 3px;
-  background: var(--white);
-  margin: 3px 0;
-  transition: 0.3s;
-  border-radius: 2px;
+.contact-btn {
+  padding: 0;
 }
 
-.menu-toggle.active span:nth-child(1) {
-  transform: rotate(-45deg) translate(-5px, 6px);
-}
-
-.menu-toggle.active span:nth-child(2) {
-  opacity: 0;
-}
-
-.menu-toggle.active span:nth-child(3) {
-  transform: rotate(45deg) translate(-5px, -6px);
-}
-
-.nav-links.active {
-  transform: translateX(0);
-}
-
-.menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+.contact-btn-mobile {
+  text-align: left;
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 99;
-  backdrop-filter: blur(4px);
-}
-
-@media (max-width: 768px) {
-  .menu-toggle {
-    display: flex;
-  }
-  .nav-links {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 250px;
-    height: 100vh;
-    background: rgb(101 0 0);
-    backdrop-filter: blur(32px) saturate(180%) brightness(1.04);
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    transition: transform 0.3s ease;
-    z-index: 100;
-    padding: 2rem;
-    box-shadow: -4px 0 32px rgba(0, 0, 0, 0.3);
-  }
-  .navbar {
-    max-width: none;
-    width: 90%;
-  }
 }
 
 /* Contact Popup */
@@ -406,6 +392,29 @@ const closeMenu = () => {
   box-shadow: 0 6px 20px rgba(139, 28, 35, 0.4);
 }
 
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .mobile-menu {
+    display: flex;
+  }
+
+  .logo-img {
+    height: 40px;
+  }
+
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+}
 </style>
-
-
