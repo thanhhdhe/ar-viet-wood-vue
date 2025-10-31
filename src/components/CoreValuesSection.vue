@@ -62,7 +62,7 @@ const visibleCards = ref({})
 const coreValues = [
   {
     title: 'Khơi dậy sự tò mò',
-    image: '/src/assets/images/khơi dậy sự tò mò 1.png',
+    image: new URL('../assets/images/khơi_dậy_sự_tò_mò_1.png', import.meta.url).href,
     description: [
       'Kích thích trí tò mò, khát vọng tìm hiểu "đằng sau mỗi công trình có câu chuyện gì?".',
       'Biến việc học lịch sử thành hành trình chơi – khám phá – tìm hiểu'
@@ -70,7 +70,7 @@ const coreValues = [
   },
   {
     title: 'An',
-    image: '/src/assets/images/An 2.png',
+    image: new URL('../assets/images/An_2.png', import.meta.url).href,
     description: [
       'Chất liệu gỗ tự nhiên, an toàn, không độc hại cho sức khỏe trẻ.',
       'Thiết kế tỉ mỉ, cạnh bo tròn, cha mẹ có thể an tâm khi con chơi.',
@@ -79,14 +79,14 @@ const coreValues = [
   },
   {
     title: 'Học qua công nghệ sống động',
-    image: '/src/assets/images/Học qua công nghệ sống động 3.png',
+    image: new URL('../assets/images/Học_qua_công_nghệ_sống_động_3.png', import.meta.url).href,
     description: [
       'Chúng tôi mang lịch sử và di sản Việt Nam đến gần hơn với trẻ bằng công nghệ AR và mô hình 3D, giúp việc học trở nên dễ dàng, hứng thú và giàu trải nghiệm.'
     ]
   },
   {
     title: 'Tự hào nguồn cội',
-    image: '/src/assets/images/HTự hào cội nguồn 4.png',
+    image: new URL('../assets/images/HTự_hào_cội_nguồn_4.png', import.meta.url).href,
     description: [
       'Gieo trong trẻ niềm tự hào về văn hoá và di sản dân tộc.',
       'Mỗi mô hình là một "câu chuyện Việt Nam thu nhỏ", giúp trẻ thấy lịch sử không xa lạ, mà gần gũi và đáng tự hào.'
@@ -94,7 +94,7 @@ const coreValues = [
   },
   {
     title: 'Kiến tạo tương lai',
-    image: '/src/assets/images/Kiến thiết tương lai 5.png',
+    image: new URL('../assets/images/Kiến_thiết_tương_lai_5.png', import.meta.url).href,
     description: [
       'Từ việc dựng xây mô hình, trẻ học cách kiến tạo thế giới.',
       'Mỗi mảnh ghép là một bài học về kiên nhẫn và tư duy logic, đặt viên gạch đầu tiên cho những người dựng xây đất nước mai sau.'
