@@ -268,7 +268,7 @@ const productsData = {
       <strong>Đặc điểm nổi bật:</strong> Bạn có thể tự tay lắp ráp Mô hình gỗ 3D với những chi tiết được cắt sẵn cực sắc sảo, với 100% gỗ thông tự nhiên, gỗ bo tròn và sơn chuyên dụng an toàn.`,
     images: [
       new URL('../assets/images/lang_bac_2.png', import.meta.url).href,
-      new URL('../assets/images/lang_bac_1.png', import.meta.url).href,
+      new URL('../assets/images/lang_bac_1.jpg', import.meta.url).href,
       new URL('../assets/images/lang_bac_3.png', import.meta.url).href
     ],
     specs: {
