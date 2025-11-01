@@ -45,11 +45,10 @@
                 <a-asset-item id="model-ben-nha-rong" src="./ar/ben_nha_rong.glb"></a-asset-item>
                 <a-asset-item id="model-khue-van-cac" src="./ar/hue_van_cac.glb"></a-asset-item>
                 
-                <!-- Audio files -->
-                <audio id="audio-lang-bac" src="./ar/audio/lang_bac_ho.mp3" preload="auto"></audio>
-                <audio id="audio-nha-san" src="./ar/audio/nha_san.mp3" preload="auto"></audio>
-                <audio id="audio-ben-nha-rong" src="./ar/audio/ben_nha_rong.mp3" preload="auto"></audio>
-                <audio id="audio-khue-van-cac" src="./ar/audio/khue_van_cac.mp3" preload="auto"></audio>
+                <audio id="audio-lang-bac" src="./ar/audio/lang_bac_ho.mp3" preload="metadata" playsinline></audio>
+                <audio id="audio-nha-san" src="./ar/audio/nha_san.mp3" preload="metadata" playsinline></audio>
+                <audio id="audio-ben-nha-rong" src="./ar/audio/ben_nha_rong.mp3" preload="metadata" playsinline></audio>
+                <audio id="audio-khue-van-cac" src="./ar/audio/khue_van_cac.mp3" preload="metadata" playsinline></audio>
             </a-assets>
 
             <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -105,7 +104,7 @@ const rotationState = ref({
     currentRotationY: 0,
     currentRotationX: 0,
     currentScale: 0.02,
-    baseScale: 0.02, // Scale gốc của model hiện tại
+    baseScale: 0.02, 
     activeModelIndex: null,
     // Pinch zoom
     isPinching: false,
@@ -132,6 +131,9 @@ const audioMap = {
 
 function startAR() {
     showPopup.value = false
+    const silentAudio = new Audio()
+    silentAudio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAACAAABhADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dX//////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYS3/f8s//tQZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//tQZDUD8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQ=='
+    silentAudio.play().catch(() => {})
 }
 
 function onTargetFound(index) {
@@ -145,23 +147,35 @@ function onTargetFound(index) {
         rotationState.value.currentScale = rotationState.value.baseScale
         enableRotation(index)
         
-        // Play audio tương ứng với model
+
         const audioId = audioMap[index]
         if (audioId) {
             const audio = document.getElementById(audioId)
             if (audio) {
-                // Dừng audio hiện tại nếu có
                 if (currentAudio && currentAudio !== audio) {
                     currentAudio.pause()
                     currentAudio.currentTime = 0
                 }
                 
-                // Play audio mới
+                audio.load()
                 audio.currentTime = 0
-                audio.play().catch(err => {
-                    console.log('Audio play error:', err)
-                })
-                currentAudio = audio
+
+                const playPromise = audio.play()
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            console.log('Audio playing successfully')
+                            currentAudio = audio
+                        })
+                        .catch(err => {
+                            console.log('Audio play error (iOS may require user interaction):', err)
+                            setTimeout(() => {
+                                audio.play().catch(() => {})
+                            }, 100)
+                        })
+                } else {
+                    currentAudio = audio
+                }
             }
         }
     }
@@ -319,10 +333,25 @@ onMounted(() => {
             console.log('A-Frame scene loaded successfully')
         })
     }
+    
+    // iOS Safari: Preload audio elements
+    Object.values(audioMap).forEach(audioId => {
+        const audio = document.getElementById(audioId)
+        if (audio) {
+            audio.load()
+        }
+    })
 })
 
 onBeforeUnmount(() => {
     console.log('Cleaning up MindAR scene...')
+    
+    // Dừng audio hiện tại
+    if (currentAudio) {
+        currentAudio.pause()
+        currentAudio.currentTime = 0
+        currentAudio = null
+    }
     
     // Stop và cleanup MindAR
     if (sceneEl) {
@@ -340,11 +369,14 @@ onBeforeUnmount(() => {
         }
     })
     
-    // Dừng camera stream
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    // Dừng camera stream - iOS Safari compatible
+    if (navigator.mediaDevices) {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(stream => {
-                stream.getTracks().forEach(track => track.stop())
+                stream.getTracks().forEach(track => {
+                    track.stop()
+                    track.enabled = false
+                })
             })
             .catch(() => {})
     }
