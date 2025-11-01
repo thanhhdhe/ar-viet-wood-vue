@@ -91,8 +91,7 @@
               </div>
             </div>
 
-            <button class="btn-ar-view">
-              <span class="icon">📱</span>
+            <button class="btn-ar-view" @click="goToARCamera">
               Xem với AR
             </button>
           </div>
@@ -252,11 +251,12 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import SimpleHeader from '../components/SimpleHeader.vue'
 import FooterSection from '../components/FooterSection.vue'
 
 const route = useRoute()
+const router = useRouter()
 
 // Database sản phẩm
 const productsData = {
@@ -402,6 +402,10 @@ const submitContact = () => {
     email: '',
     message: ''
   }
+}
+
+const goToARCamera = () => {
+  router.push({ name: 'ARExperience' })
 }
 </script>
 
