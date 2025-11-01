@@ -35,47 +35,100 @@
     </div>
 
     <div id="ar-container">
-        <a-scene mindar-image="imageTargetSrc: /ar/targets.mind; maxTrack: 1; filterMinCF: 0.001; filterBeta: 0.001"
+        <a-scene mindar-image="imageTargetSrc: /ar/targets_4.mind; maxTrack: 1; filterMinCF: 0.001; filterBeta: 0.001"
             color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
             device-orientation-permission-ui="enabled: false" embedded>
 
             <a-assets>
-                <a-asset-item id="gltf-model" src="/ar/lang-bac-ho-gltf/lang-bac-ho.gltf"></a-asset-item>
+                <a-asset-item id="model-lang-bac" src="./ar/lang_bac_ho.glb"></a-asset-item>
+                <a-asset-item id="model-nha-san" src="./ar/nha_san.glb"></a-asset-item>
+                <a-asset-item id="model-ben-nha-rong" src="./ar/ben_nha_rong.glb"></a-asset-item>
+                <a-asset-item id="model-khue-van-cac" src="./ar/hue_van_cac.glb"></a-asset-item>
+                
+                <!-- Audio files -->
+                <audio id="audio-lang-bac" src="./ar/audio/lang_bac_ho.mp3" preload="auto"></audio>
+                <audio id="audio-nha-san" src="./ar/audio/nha_san.mp3" preload="auto"></audio>
+                <audio id="audio-ben-nha-rong" src="./ar/audio/ben_nha_rong.mp3" preload="auto"></audio>
+                <audio id="audio-khue-van-cac" src="./ar/audio/khue_van_cac.mp3" preload="auto"></audio>
             </a-assets>
 
             <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-            <!-- Lặp target -->
-            <template v-for="i in 20" :key="`target-${i}`">
-                <a-entity :mindar-image-target="`targetIndex: ${i - 1}`" @targetFound="onTargetFound(i - 1)"
-                    @targetLost="onTargetLost(i - 1)">
-
-                    <!-- Nhóm bao ngoài để ổn định mô hình -->
-                    <a-entity position="0 0 0">
-                        <a-gltf-model :id="`model-${i - 1}`" src="#gltf-model" position="-0.4 0 0.3" rotation="0 270 -5"
-                            scale="0.03 0.03 0.03" visible="false" animation-mixer>
-                        </a-gltf-model>
-
-                    </a-entity>
+            <!-- Target 1 - Lăng Bác Hồ -->
+            <a-entity mindar-image-target="targetIndex: 0" @targetFound="onTargetFound(0)" @targetLost="onTargetLost(0)">
+                <a-entity position="0 0 0">
+                    <a-gltf-model id="model-0" src="#model-lang-bac" position="0 0 0" rotation="0 0 0"
+                        scale="0.02 0.02 0.02" visible="false" animation-mixer>
+                    </a-gltf-model>
                 </a-entity>
-            </template>
+            </a-entity>
+
+            <!-- Target 2 - Nhà Sàn -->
+            <a-entity mindar-image-target="targetIndex: 2" @targetFound="onTargetFound(1)" @targetLost="onTargetLost(1)">
+                <a-entity position="0 0 0">
+                    <a-gltf-model id="model-1" src="#model-nha-san" position="0 0 0" rotation="0 0 0"
+                        scale="0.8 0.8 0.8" visible="false" animation-mixer>
+                    </a-gltf-model>
+                </a-entity>
+            </a-entity>
+
+            <!-- Target 3 - Bến Nhà Rồng -->
+            <a-entity mindar-image-target="targetIndex: 1" @targetFound="onTargetFound(2)" @targetLost="onTargetLost(2)">
+                <a-entity position="0 0 0">
+                    <a-gltf-model id="model-2" src="#model-ben-nha-rong" position="0 0 0" rotation="0 0 0"
+                        scale="0.02 0.02 0.02" visible="false" animation-mixer>
+                    </a-gltf-model>
+                </a-entity>
+            </a-entity>
+
+            <!-- Target 4 - Khuê Văn Các -->
+            <a-entity mindar-image-target="targetIndex: 3" @targetFound="onTargetFound(3)" @targetLost="onTargetLost(3)">
+                <a-entity position="0 0 0">
+                    <a-gltf-model id="model-3" src="#model-khue-van-cac" position="0 0 0" rotation="0 0 0"
+                        scale="0.02 0.02 0.02" visible="false" animation-mixer>
+                    </a-gltf-model>
+                </a-entity>
+            </a-entity>
         </a-scene>
     </div>
 </template>
 
 <script setup>
 import SimpleHeader from '../components/SimpleHeader.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const showPopup = ref(true)
 const rotationState = ref({
     isRotating: false,
     startX: 0,
     startY: 0,
-    currentRotationY: 270,
-    currentRotationX: -5,
-    activeModelIndex: null
+    currentRotationY: 0,
+    currentRotationX: 0,
+    currentScale: 0.02,
+    baseScale: 0.02, // Scale gốc của model hiện tại
+    activeModelIndex: null,
+    // Pinch zoom
+    isPinching: false,
+    initialPinchDistance: 0
 })
+let sceneEl = null
+let currentAudio = null
+
+// Map target index to base scale
+const scaleMap = {
+    0: 0.02,  // Lăng Bác Hồ
+    1: 1,     // Nhà Sàn
+    2: 0.02,  // Bến Nhà Rồng
+    3: 0.02   // Khuê Văn Các
+}
+
+// Map target index to audio id
+const audioMap = {
+    0: 'audio-lang-bac',
+    1: 'audio-nha-san',
+    2: 'audio-ben-nha-rong',
+    3: 'audio-khue-van-cac'
+}
 
 function startAR() {
     showPopup.value = false
@@ -87,7 +140,30 @@ function onTargetFound(index) {
     if (model) {
         model.setAttribute('visible', 'true')
         rotationState.value.activeModelIndex = index
+        // Set base scale cho model hiện tại
+        rotationState.value.baseScale = scaleMap[index] || 0.02
+        rotationState.value.currentScale = rotationState.value.baseScale
         enableRotation(index)
+        
+        // Play audio tương ứng với model
+        const audioId = audioMap[index]
+        if (audioId) {
+            const audio = document.getElementById(audioId)
+            if (audio) {
+                // Dừng audio hiện tại nếu có
+                if (currentAudio && currentAudio !== audio) {
+                    currentAudio.pause()
+                    currentAudio.currentTime = 0
+                }
+                
+                // Play audio mới
+                audio.currentTime = 0
+                audio.play().catch(err => {
+                    console.log('Audio play error:', err)
+                })
+                currentAudio = audio
+            }
+        }
     }
 }
 
@@ -97,6 +173,17 @@ function onTargetLost(index) {
     if (model) {
         model.setAttribute('visible', 'false')
         rotationState.value.activeModelIndex = null
+        
+        // Dừng audio khi mất target
+        const audioId = audioMap[index]
+        if (audioId) {
+            const audio = document.getElementById(audioId)
+            if (audio && audio === currentAudio) {
+                audio.pause()
+                audio.currentTime = 0
+                currentAudio = null
+            }
+        }
     }
 }
 
@@ -104,17 +191,62 @@ function enableRotation(index) {
     const container = document.getElementById('ar-container')
     if (!container) return
 
+    // Helper function để tính khoảng cách giữa 2 điểm (pinch)
+    const getDistance = (touch1, touch2) => {
+        const dx = touch1.clientX - touch2.clientX
+        const dy = touch1.clientY - touch2.clientY
+        return Math.sqrt(dx * dx + dy * dy)
+    }
+
     const onTouchStart = (e) => {
         if (rotationState.value.activeModelIndex !== index) return
-        rotationState.value.isRotating = true
-        rotationState.value.startX = e.touches ? e.touches[0].clientX : e.clientX
-        rotationState.value.startY = e.touches ? e.touches[0].clientY : e.clientY
+        
+        // Kiểm tra nếu là pinch (2 ngón)
+        if (e.touches && e.touches.length === 2) {
+            rotationState.value.isPinching = true
+            rotationState.value.isRotating = false
+            rotationState.value.initialPinchDistance = getDistance(e.touches[0], e.touches[1])
+        } else if (e.touches && e.touches.length === 1) {
+            rotationState.value.isRotating = true
+            rotationState.value.isPinching = false
+            rotationState.value.startX = e.touches[0].clientX
+            rotationState.value.startY = e.touches[0].clientY
+        } else {
+            // Mouse
+            rotationState.value.isRotating = true
+            rotationState.value.startX = e.clientX
+            rotationState.value.startY = e.clientY
+        }
     }
 
     const onTouchMove = (e) => {
-        if (!rotationState.value.isRotating || rotationState.value.activeModelIndex !== index) return
-        
+        if (rotationState.value.activeModelIndex !== index) return
         e.preventDefault()
+
+        // Pinch zoom với 2 ngón
+        if (e.touches && e.touches.length === 2 && rotationState.value.isPinching) {
+            const currentDistance = getDistance(e.touches[0], e.touches[1])
+            const scaleDelta = (currentDistance - rotationState.value.initialPinchDistance) * 0.00005
+            
+            const baseScale = rotationState.value.baseScale
+            const minScale = baseScale * 0.5  // Tối thiểu 50% scale gốc
+            const maxScale = baseScale * 2    // Tối đa 200% scale gốc
+            
+            rotationState.value.currentScale = Math.max(minScale, Math.min(maxScale, rotationState.value.currentScale + scaleDelta))
+            
+            const model = document.getElementById(`model-${index}`)
+            if (model) {
+                const scale = rotationState.value.currentScale
+                model.setAttribute('scale', `${scale} ${scale} ${scale}`)
+            }
+            
+            rotationState.value.initialPinchDistance = currentDistance
+            return
+        }
+
+        // Rotation với 1 ngón hoặc chuột
+        if (!rotationState.value.isRotating) return
+        
         const currentX = e.touches ? e.touches[0].clientX : e.clientX
         const currentY = e.touches ? e.touches[0].clientY : e.clientY
         
@@ -130,7 +262,7 @@ function enableRotation(index) {
         const model = document.getElementById(`model-${index}`)
         if (model) {
             model.setAttribute('rotation', 
-                `${rotationState.value.currentRotationX} ${rotationState.value.currentRotationY} -5`
+                `${rotationState.value.currentRotationX} ${rotationState.value.currentRotationY} 0`
             )
         }
         
@@ -140,6 +272,26 @@ function enableRotation(index) {
 
     const onTouchEnd = () => {
         rotationState.value.isRotating = false
+        rotationState.value.isPinching = false
+    }
+
+    // Mouse wheel zoom cho desktop
+    const onWheel = (e) => {
+        if (rotationState.value.activeModelIndex !== index) return
+        e.preventDefault()
+        
+        const delta = e.deltaY * -0.0001
+        const baseScale = rotationState.value.baseScale
+        const minScale = baseScale * 0.5  // Tối thiểu 50% scale gốc
+        const maxScale = baseScale * 2    // Tối đa 200% scale gốc
+        
+        rotationState.value.currentScale = Math.max(minScale, Math.min(maxScale, rotationState.value.currentScale + delta))
+        
+        const model = document.getElementById(`model-${index}`)
+        if (model) {
+            const scale = rotationState.value.currentScale
+            model.setAttribute('scale', `${scale} ${scale} ${scale}`)
+        }
     }
 
     // Touch events cho mobile
@@ -152,17 +304,49 @@ function enableRotation(index) {
     container.addEventListener('mousemove', onTouchMove)
     container.addEventListener('mouseup', onTouchEnd)
     container.addEventListener('mouseleave', onTouchEnd)
+    
+    // Wheel event cho zoom
+    container.addEventListener('wheel', onWheel, { passive: false })
 }
 
 onMounted(() => {
     console.log('MindAR scene mounted.')
 
     // Đợi scene khởi tạo xong
-    const scene = document.querySelector('a-scene')
-    if (scene) {
-        scene.addEventListener('loaded', () => {
+    sceneEl = document.querySelector('a-scene')
+    if (sceneEl) {
+        sceneEl.addEventListener('loaded', () => {
             console.log('A-Frame scene loaded successfully')
         })
+    }
+})
+
+onBeforeUnmount(() => {
+    console.log('Cleaning up MindAR scene...')
+    
+    // Stop và cleanup MindAR
+    if (sceneEl) {
+        const arSystem = sceneEl.systems['mindar-image-system']
+        if (arSystem) {
+            arSystem.stop()
+        }
+    }
+    
+    // Xóa tất cả UI overlays của MindAR
+    const mindAROverlays = document.querySelectorAll('.mindar-ui-overlay, .mindar-ui-loading, .mindar-ui-compatibility')
+    mindAROverlays.forEach(el => {
+        if (el && el.parentNode) {
+            el.parentNode.removeChild(el)
+        }
+    })
+    
+    // Dừng camera stream
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                stream.getTracks().forEach(track => track.stop())
+            })
+            .catch(() => {})
     }
 })
 </script>
@@ -172,14 +356,14 @@ onMounted(() => {
 #ar-container {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 77px);
     overflow: hidden;
     z-index: 1;
     background: linear-gradient(135deg, #1A1A1A 0%, #2d2d2d 100%);
 }
 
 #ar-container::before {
-    content: 'Đang khởi tạo camera AR...';
+    /* content: 'Đang khởi tạo camera AR...'; */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -194,10 +378,11 @@ onMounted(() => {
 /* Popup Overlay */
 .popup-overlay {
     position: fixed;
-    top: 0;
+    top: 77px;
     left: 0;
     right: 0;
     bottom: 0;
+    height: calc(100vh - 77px);
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(8px);
     z-index: 50;

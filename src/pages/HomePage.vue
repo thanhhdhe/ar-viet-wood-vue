@@ -38,25 +38,25 @@ const products = [
   {
     id: 'lang-bac',
     name: 'Lăng Chủ tịch Hồ Chí Minh',
-    image: new URL('../assets/images/lang_Bac.png', import.meta.url).href,
+    image: new URL('../assets/images/lang_bac_3.png', import.meta.url).href,
     price: 'Liên hệ'
   },
   {
     id: 'ben-nha-rong',
     name: 'Bến Nhà Rồng',
-    image: new URL('../assets/images/ben_nha_rong.png', import.meta.url).href,
+    image: new URL('../assets/images/ben_nha_rong_1.png', import.meta.url).href,
     price: 'Liên hệ'
   },
   {
     id: 'nha-san-bac-ho',
     name: 'Nhà Sàn Bác Hồ',
-    image: new URL('../assets/images/nha_san_bac_ho.png', import.meta.url).href,
+    image: new URL('../assets/images/nha_san_bac_ho_1.png', import.meta.url).href,
     price: 'Liên hệ'
   },
   {
     id: 'khue-van-cac',
     name: 'Khuê Văn Các',
-    image: new URL('../assets/images/khue_van_cac.png', import.meta.url).href,
+    image: new URL('../assets/images/khue_van_cac_1.png', import.meta.url).href,
     price: 'Liên hệ'
   }
 ]

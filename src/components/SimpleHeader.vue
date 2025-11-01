@@ -219,14 +219,17 @@ const submitContact = () => {
   display: none;
   flex-direction: column;
   gap: 1rem;
-  padding: 1rem 0;
+  padding: 0;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
 }
 
 .mobile-menu.active {
   max-height: 300px;
+  padding: 1rem 0;
+  opacity: 1;
 }
 
 .mobile-nav-link {

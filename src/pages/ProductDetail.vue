@@ -267,8 +267,9 @@ const productsData = {
       Đáp lại tình cảm của đại đa số những người đam mê lắp ráp Mô hình 3D, <strong>AR Vietwood</strong> thực hiện Bộ lắp ráp Mô hình gỗ 3D Lăng Bác - Lăng Chủ Tịch Hồ Chí Minh với hi vọng, đây sẽ là món quà tinh thần giá trị trong những dịp trọng đại của đất nước.<br><br>
       <strong>Đặc điểm nổi bật:</strong> Bạn có thể tự tay lắp ráp Mô hình gỗ 3D với những chi tiết được cắt sẵn cực sắc sảo, với 100% gỗ thông tự nhiên, gỗ bo tròn và sơn chuyên dụng an toàn.`,
     images: [
-      new URL('../assets/images/lang_Bac.png', import.meta.url).href,
-      new URL('../assets/images/lang_Bac.png', import.meta.url).href,
+      new URL('../assets/images/lang_bac_2.png', import.meta.url).href,
+      new URL('../assets/images/lang_bac_1.png', import.meta.url).href,
+      new URL('../assets/images/lang_bac_3.png', import.meta.url).href
     ],
     specs: {
       size: '37cm x 37cm x 8cm',
@@ -288,8 +289,11 @@ const productsData = {
       Mô hình gỗ 3D <strong>Bến Nhà Rồng</strong> của AR Vietwood tái hiện chân thực kiến trúc đặc trưng của công trình lịch sử này, với những chi tiết tinh xảo được khắc họa tỉ mỉ.<br><br>
       <strong>Đặc điểm nổi bật:</strong> Mô hình được thiết kế với độ chi tiết cao, dễ dàng lắp ráp, phù hợp làm quà tặng ý nghĩa hoặc trang trí không gian học tập, làm việc.`,
     images: [
-      new URL('../assets/images/ben_nha_rong.png', import.meta.url).href,
       new URL('../assets/images/ben_nha_rong_1.png', import.meta.url).href,
+      new URL('../assets/images/ben_nha_rong_2.png', import.meta.url).href,
+      new URL('../assets/images/ben_nha_rong_3.png', import.meta.url).href,
+      new URL('../assets/images/ben_nha_rong_4.png', import.meta.url).href,
+      new URL('../assets/images/ben_nha_rong_5.png', import.meta.url).href,
     ],
     specs: {
       size: '35cm x 25cm x 10cm',
@@ -309,8 +313,11 @@ const productsData = {
       Mô hình gỗ 3D <strong>Nhà Sàn Bác Hồ</strong> tái hiện trung thực kiến trúc nhà sàn dân tộc Thái, nơi Bác đã sống và làm việc trong suốt 11 năm (1958-1969).<br><br>
       <strong>Đặc điểm nổi bật:</strong> Chi tiết chân thực từ cột nhà, mái lợp, cầu thang đến ao cá xung quanh. Sản phẩm mang giá trị giáo dục cao, phù hợp cho mọi lứa tuổi.`,
     images: [
-      new URL('../assets/images/nha_san_bac_ho.png', import.meta.url).href,
       new URL('../assets/images/nha_san_bac_ho_1.png', import.meta.url).href,
+      new URL('../assets/images/nha_san_bac_ho_2.png', import.meta.url).href,
+      new URL('../assets/images/nha_san_bac_ho_3.png', import.meta.url).href,
+      new URL('../assets/images/nha_san_bac_ho_4.png', import.meta.url).href,
+      new URL('../assets/images/nha_san_bac_ho_5.png', import.meta.url).href,
     ],
     specs: {
       size: '30cm x 25cm x 15cm',
@@ -330,8 +337,11 @@ const productsData = {
       Mô hình gỗ 3D <strong>Khuê Văn Các</strong> của AR Vietwood tái hiện chi tiết kiến trúc mái cong đặc trưng, các hoa văn trang trí tinh xảo và cấu trúc 4 trụ cột chắc chắn.<br><br>
       <strong>Đặc điểm nổi bật:</strong> Mô hình thể hiện tài hoa của nghệ nhân Việt, kết hợp giữa truyền thống và hiện đại. Là món quà tri ân ý nghĩa cho thầy cô, bạn bè yêu văn hóa Việt.`,
     images: [
-      new URL('../assets/images/khue_van_cac.png', import.meta.url).href,
-      new URL('../assets/images/khue_van_cac.png', import.meta.url).href,
+      new URL('../assets/images/khue_van_cac_1.png', import.meta.url).href,
+      new URL('../assets/images/khue_van_cac_2.png', import.meta.url).href,
+      new URL('../assets/images/khue_van_cac_3.png', import.meta.url).href,
+      new URL('../assets/images/khue_van_cac_4.png', import.meta.url).href,
+      new URL('../assets/images/khue_van_cac_5.png', import.meta.url).href,
     ],
     specs: {
       size: '25cm x 25cm x 20cm',
@@ -499,7 +509,7 @@ const submitContact = () => {
 
 .thumbnail-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
 }
 
