@@ -45,7 +45,7 @@
                 <a-asset-item id="model-ben-nha-rong" src="./ar/ben_nha_rong.glb"></a-asset-item>
                 <a-asset-item id="model-khue-van-cac" src="./ar/hue_van_cac.glb"></a-asset-item>
                 
-                <audio id="audio-lang-bac" src="./ar/audio/lang_bac_ho.mp3" preload="metadata" playsinline></audio>
+                <audio id="audio-lang-bac" src="./ar/audio/lang_bac.mp3" preload="metadata" playsinline></audio>
                 <audio id="audio-nha-san" src="./ar/audio/nha_san.mp3" preload="metadata" playsinline></audio>
                 <audio id="audio-ben-nha-rong" src="./ar/audio/ben_nha_rong.mp3" preload="metadata" playsinline></audio>
                 <audio id="audio-khue-van-cac" src="./ar/audio/khue_van_cac.mp3" preload="metadata" playsinline></audio>
