@@ -63,7 +63,7 @@
             </a-entity>
 
             <!-- Target 2 - Nhà Sàn -->
-            <a-entity mindar-image-target="targetIndex: 2" @targetFound="onTargetFound(1)" @targetLost="onTargetLost(1)">
+            <a-entity mindar-image-target="targetIndex: 3" @targetFound="onTargetFound(1)" @targetLost="onTargetLost(1)">
                 <a-entity position="0 0 0">
                     <a-gltf-model id="model-1" src="#model-nha-san" position="0 0 0" rotation="0 0 0"
                         scale="0.8 0.8 0.8" visible="false" animation-mixer>
@@ -81,7 +81,7 @@
             </a-entity>
 
             <!-- Target 4 - Khuê Văn Các -->
-            <a-entity mindar-image-target="targetIndex: 3" @targetFound="onTargetFound(3)" @targetLost="onTargetLost(3)">
+            <a-entity mindar-image-target="targetIndex: 2" @targetFound="onTargetFound(3)" @targetLost="onTargetLost(3)">
                 <a-entity position="0 0 0">
                     <a-gltf-model id="model-3" src="#model-khue-van-cac" position="0 0 0" rotation="0 0 0"
                         scale="0.02 0.02 0.02" visible="false" animation-mixer>
