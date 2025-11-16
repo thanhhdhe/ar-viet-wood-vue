@@ -35,7 +35,7 @@
     </div>
 
     <div id="ar-container">
-        <a-scene mindar-image="imageTargetSrc: /ar/targets_4.mind; maxTrack: 1; filterMinCF: 0.001; filterBeta: 0.001"
+        <a-scene mindar-image="imageTargetSrc: /ar/targets_4.mind; maxTrack: 4; filterMinCF: 0.0001; filterBeta: 0.0001; missTolerance: 5; warmupTolerance: 3"
             color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
             device-orientation-permission-ui="enabled: false" embedded>
 
@@ -54,7 +54,7 @@
             <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
             <!-- Target 1 - Lăng Bác Hồ -->
-            <a-entity mindar-image-target="targetIndex: 0" @targetFound="onTargetFound(0)" @targetLost="onTargetLost(0)">
+            <a-entity mindar-image-target="targetIndex: 0; autoHide: false" @targetFound="onTargetFound(0)" @targetLost="onTargetLost(0)">
                 <a-entity position="0 0 0">
                     <a-gltf-model id="model-0" src="#model-lang-bac" position="0 0 0" rotation="0 0 0"
                         scale="0.02 0.02 0.02" visible="false" animation-mixer>
@@ -63,7 +63,7 @@
             </a-entity>
 
             <!-- Target 2 - Nhà Sàn -->
-            <a-entity mindar-image-target="targetIndex: 3" @targetFound="onTargetFound(1)" @targetLost="onTargetLost(1)">
+            <a-entity mindar-image-target="targetIndex: 3; autoHide: false" @targetFound="onTargetFound(1)" @targetLost="onTargetLost(1)">
                 <a-entity position="0 0 0">
                     <a-gltf-model id="model-1" src="#model-nha-san" position="0 0 0" rotation="0 0 0"
                         scale="0.8 0.8 0.8" visible="false" animation-mixer>
@@ -72,7 +72,7 @@
             </a-entity>
 
             <!-- Target 3 - Bến Nhà Rồng -->
-            <a-entity mindar-image-target="targetIndex: 1" @targetFound="onTargetFound(2)" @targetLost="onTargetLost(2)">
+            <a-entity mindar-image-target="targetIndex: 1; autoHide: false" @targetFound="onTargetFound(2)" @targetLost="onTargetLost(2)">
                 <a-entity position="0 0 0">
                     <a-gltf-model id="model-2" src="#model-ben-nha-rong" position="0 0 0" rotation="0 0 0"
                         scale="0.02 0.02 0.02" visible="false" animation-mixer>
@@ -81,7 +81,7 @@
             </a-entity>
 
             <!-- Target 4 - Khuê Văn Các -->
-            <a-entity mindar-image-target="targetIndex: 2" @targetFound="onTargetFound(3)" @targetLost="onTargetLost(3)">
+            <a-entity mindar-image-target="targetIndex: 2; autoHide: false" @targetFound="onTargetFound(3)" @targetLost="onTargetLost(3)">
                 <a-entity position="0 0 0">
                     <a-gltf-model id="model-3" src="#model-khue-van-cac" position="0 0 0" rotation="0 0 0"
                         scale="0.02 0.02 0.02" visible="false" animation-mixer>
@@ -112,6 +112,10 @@ const rotationState = ref({
 })
 let sceneEl = null
 let currentAudio = null
+let hideTimeouts = {} // Object để lưu timeout cho từng model
+let audioStates = {} // Object để lưu trạng thái audio của từng target
+let lastFoundTime = {} // Track thời gian tìm thấy target gần nhất
+let stabilityCounters = {} // Đếm số lần target được tìm thấy liên tiếp
 
 // Map target index to base scale
 const scaleMap = {
@@ -138,6 +142,20 @@ function startAR() {
 
 function onTargetFound(index) {
     console.log(`Target ${index} found - showing 3D model`)
+    
+    // Ghi nhận thời gian tìm thấy
+    lastFoundTime[index] = Date.now()
+    
+    // Tăng stability counter
+    stabilityCounters[index] = (stabilityCounters[index] || 0) + 1
+    
+    // Hủy timeout ẩn model nếu có
+    if (hideTimeouts[index]) {
+        clearTimeout(hideTimeouts[index])
+        delete hideTimeouts[index]
+        console.log(`Cancelled hide timeout for target ${index}`)
+    }
+    
     const model = document.getElementById(`model-${index}`)
     if (model) {
         model.setAttribute('visible', 'true')
@@ -147,34 +165,54 @@ function onTargetFound(index) {
         rotationState.value.currentScale = rotationState.value.baseScale
         enableRotation(index)
         
-
         const audioId = audioMap[index]
         if (audioId) {
             const audio = document.getElementById(audioId)
             if (audio) {
+                // Nếu audio đang phát cho target này, không làm gì
+                if (audioStates[index] && audioStates[index].isPlaying && currentAudio === audio) {
+                    console.log(`Audio for target ${index} already playing, continuing...`)
+                    return
+                }
+                
+                // Dừng audio khác nếu có
                 if (currentAudio && currentAudio !== audio) {
                     currentAudio.pause()
                     currentAudio.currentTime = 0
+                    // Reset trạng thái audio cũ
+                    Object.keys(audioStates).forEach(key => {
+                        if (audioStates[key] && audioStates[key].audio === currentAudio) {
+                            audioStates[key].isPlaying = false
+                        }
+                    })
                 }
                 
-                audio.load()
-                audio.currentTime = 0
+                // Chỉ phát audio nếu chưa phát hoặc target đã stable
+                if (!audioStates[index] || !audioStates[index].isPlaying) {
+                    audio.load()
+                    audio.currentTime = 0
 
-                const playPromise = audio.play()
-                if (playPromise !== undefined) {
-                    playPromise
-                        .then(() => {
-                            console.log('Audio playing successfully')
-                            currentAudio = audio
-                        })
-                        .catch(err => {
-                            console.log('Audio play error (iOS may require user interaction):', err)
-                            setTimeout(() => {
-                                audio.play().catch(() => {})
-                            }, 100)
-                        })
-                } else {
-                    currentAudio = audio
+                    const playPromise = audio.play()
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .then(() => {
+                                console.log('Audio playing successfully')
+                                currentAudio = audio
+                                audioStates[index] = { audio: audio, isPlaying: true }
+                            })
+                            .catch(err => {
+                                console.log('Audio play error (iOS may require user interaction):', err)
+                                setTimeout(() => {
+                                    audio.play().then(() => {
+                                        currentAudio = audio
+                                        audioStates[index] = { audio: audio, isPlaying: true }
+                                    }).catch(() => {})
+                                }, 100)
+                            })
+                    } else {
+                        currentAudio = audio
+                        audioStates[index] = { audio: audio, isPlaying: true }
+                    }
                 }
             }
         }
@@ -182,23 +220,52 @@ function onTargetFound(index) {
 }
 
 function onTargetLost(index) {
-    console.log(`Target ${index} lost - hiding model`)
-    const model = document.getElementById(`model-${index}`)
-    if (model) {
-        model.setAttribute('visible', 'false')
-        rotationState.value.activeModelIndex = null
+    console.log(`Target ${index} lost - scheduling hide model`)
+    
+    // Reset stability counter
+    stabilityCounters[index] = 0
+    
+    // Tính toán delay time dựa trên thời gian tracking gần nhất
+    const timeSinceFound = Date.now() - (lastFoundTime[index] || 0)
+    let delayTime = 3000 // Default 3 giây
+    
+    // Nếu target vừa mới được tìm thấy (< 2 giây), tăng delay time
+    if (timeSinceFound < 2000) {
+        delayTime = 5000 // 5 giây delay
+        console.log(`Target ${index} was recently found, using longer delay: ${delayTime}ms`)
+    }
+    
+    // KHÔNG ẩn model ngay lập tức, model vẫn visible
+    // Chỉ đặt timeout để ẩn sau delay time
+    hideTimeouts[index] = setTimeout(() => {
+        const model = document.getElementById(`model-${index}`)
+        if (model) {
+            model.setAttribute('visible', 'false')
+            console.log(`Model ${index} hidden after ${delayTime}ms timeout`)
+        }
         
-        // Dừng audio khi mất target
+        if (rotationState.value.activeModelIndex === index) {
+            rotationState.value.activeModelIndex = null
+        }
+        
+        // Dừng audio sau khi model bị ẩn
         const audioId = audioMap[index]
         if (audioId) {
             const audio = document.getElementById(audioId)
-            if (audio && audio === currentAudio) {
+            if (audio && audioStates[index] && audioStates[index].isPlaying) {
                 audio.pause()
                 audio.currentTime = 0
-                currentAudio = null
+                audioStates[index].isPlaying = false
+                if (currentAudio === audio) {
+                    currentAudio = null
+                }
+                console.log(`Audio for target ${index} stopped after timeout`)
             }
         }
-    }
+        
+        // Xóa timeout khỏi object
+        delete hideTimeouts[index]
+    }, delayTime)
 }
 
 function enableRotation(index) {
@@ -267,8 +334,8 @@ function enableRotation(index) {
         const deltaX = currentX - rotationState.value.startX
         const deltaY = currentY - rotationState.value.startY
         
-        rotationState.value.currentRotationY += deltaX * 0.5
-        rotationState.value.currentRotationX -= deltaY * 0.3
+        rotationState.value.currentRotationY += deltaX * 0.3  // Giảm độ nhạy rotation
+        rotationState.value.currentRotationX -= deltaY * 0.2  // Giảm độ nhạy rotation
         
         // Giới hạn góc xoay X để không bị lộn ngược
         rotationState.value.currentRotationX = Math.max(-85, Math.min(85, rotationState.value.currentRotationX))
@@ -345,6 +412,15 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     console.log('Cleaning up MindAR scene...')
+    
+    // Clear tất cả timeout
+    Object.values(hideTimeouts).forEach(timeoutId => {
+        clearTimeout(timeoutId)
+    })
+    hideTimeouts = {}
+    audioStates = {}
+    lastFoundTime = {}
+    stabilityCounters = {}
     
     // Dừng audio hiện tại
     if (currentAudio) {
